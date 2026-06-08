@@ -1,0 +1,967 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+
+    <title>Crop Recommendation</title>
+    
+    <link rel="stylesheet"
+      href="{{ url_for('static',
+      filename='style.css') }}">
+
+</head>
+
+<body class="cropBody">
+
+<!-- POPUP -->
+
+<div id="popupOverlay">
+
+    <div class="popupBox">
+
+        <h1>
+            Before You Begin
+        </h1>
+
+        <p>
+
+            To get accurate crop recommendations,
+            KrishiMitra needs information about your soil
+            and local weather conditions.
+
+            These values help the system understand
+            which crops are most suitable and profitable
+            for your farm.
+
+        </p>
+
+        <ul>
+
+            <li>
+
+                <b>N, P, K Values (Nitrogen, Phosphorus, Potassium)</b><br><br>
+
+                These are the three major nutrients required for plant growth.
+
+                <br><br>
+
+                • Nitrogen (N) helps leaf and stem growth.<br>
+                • Phosphorus (P) helps root development and flowering.<br>
+                • Potassium (K) improves crop strength and disease resistance.
+
+                <br><br>
+
+                <b>Ways to measure:</b><br>
+
+                • Government Soil Testing Laboratories<br>
+                • Soil Health Card Scheme<br>
+                • Portable NPK Sensors/Meters<br>
+                • Private agricultural labs
+
+                <br><br>
+
+                <b>Recommended Method:</b><br>
+
+                Government soil testing centers and Soil Health Cards
+                are the most reliable, low-cost, and accessible options
+                for Indian farmers.
+
+            </li>
+
+            <br>
+
+            <li>
+
+                <b>pH Value</b><br><br>
+
+                pH tells whether the soil is acidic,
+                neutral, or alkaline.
+
+                Soil pH strongly affects nutrient absorption
+                and crop growth.
+
+                <br><br>
+
+                <b>Ways to measure:</b><br>
+
+                • Digital pH Meter<br>
+                • Soil Testing Kit<br>
+                • Government Soil Testing Centers
+
+                <br><br>
+
+                <b>Recommended Method:</b><br>
+
+                A simple soil testing kit or government soil testing center
+                is cheap, accurate enough, and easily available for most farmers.
+
+            </li>
+
+            <br>
+
+            <li>
+
+                <b>Humidity & Temperature</b><br><br>
+
+                These values describe weather conditions
+                around the farm.
+
+                They affect crop growth,
+                disease spread,
+                and water requirements.
+
+                <br><br>
+
+                <b>Ways to measure:</b><br>
+
+                • Mobile Weather Apps<br>
+                • Local weather stations<br>
+                • Digital temperature & humidity sensors
+
+                <br><br>
+
+                <b>Recommended Method:</b><br>
+
+                Weather apps and local weather reports
+                are the cheapest and easiest options
+                for most farmers.
+
+            </li>
+
+            <br>
+
+            <li>
+
+                <b>Rainfall</b><br><br>
+
+                Rainfall indicates how much water
+                the crops naturally receive.
+
+                Different crops require different rainfall ranges.
+
+                <br><br>
+
+                <b>Ways to measure:</b><br>
+
+                • Weather Apps<br>
+                • IMD weather reports<br>
+                • Rain gauges<br>
+                • Weather APIs
+
+                <br><br>
+
+                <b>Recommended Method:</b><br>
+
+                Local weather apps and IMD reports
+                are reliable, free, and easily accessible.
+
+            </li>
+
+        </ul>
+
+        <div class="checkboxSection">
+
+            <input type="checkbox" id="confirmCheckbox">
+
+            <label for="confirmCheckbox">
+
+                I have the NPK, pH, humidity,
+                temperature, and rainfall values
+                necessary for crop recommendation.
+
+            </label>
+
+        </div>
+
+        <button onclick="closePopup()">
+
+            Okay
+
+        </button>
+
+    </div>
+
+</div>
+
+
+
+<!-- MAIN CONTENT -->
+
+<div class="cropContainer">
+
+    <h1>
+        Crop Recommendation
+    </h1>
+
+    <p class="instructionText">
+
+        Please fill the details acquired
+        from your soil test and weather conditions.
+
+    </p>
+
+    <!-- INPUT MODE -->
+
+    <div class="inputModeBox">
+
+        <label>
+
+            <input type="radio"
+                   name="inputMode"
+                   value="number"
+                   checked
+                   onchange="changeInputMode()">
+
+            Number Input
+
+        </label>
+
+        <label>
+
+            <input type="radio"
+                   name="inputMode"
+                   value="slider"
+                   onchange="changeInputMode()">
+
+            Slider Input
+
+        </label>
+
+    </div>
+
+    <!-- INPUT GRID -->
+
+    <div class="inputGrid">
+
+        <!-- ROW 1 -->
+
+        <div class="inputRow">
+
+            <!-- N -->
+
+            <div class="fieldBox">
+
+                <label>
+                    Nitrogen (N)
+                </label>
+
+                <input type="number"
+                       class="numberInput">
+
+                <div class="sliderContainer">
+
+                    <input type="range"
+                           class="sliderInput"
+                           min="0"
+                           max="500"
+                           value="50"
+                           oninput="updateSliderValue(this)">
+
+                    <span class="sliderValue">
+                        50
+                    </span>
+
+                </div>
+
+            </div>
+
+            <!-- P -->
+
+            <div class="fieldBox">
+
+                <label>
+                    Phosphorus (P)
+                </label>
+
+                <input type="number"
+                       class="numberInput">
+
+                <div class="sliderContainer">
+
+                    <input type="range"
+                           class="sliderInput"
+                           min="0"
+                           max="500"
+                           value="40"
+                           oninput="updateSliderValue(this)">
+
+                    <span class="sliderValue">
+                        40
+                    </span>
+
+                </div>
+
+            </div>
+
+        </div>
+
+        <!-- ROW 2 -->
+
+        <div class="inputRow">
+
+            <!-- K -->
+
+            <div class="fieldBox">
+
+                <label>
+                    Potassium (K)
+                </label>
+
+                <input type="number"
+                       class="numberInput">
+
+                <div class="sliderContainer">
+
+                    <input type="range"
+                           class="sliderInput"
+                           min="0"
+                           max="500"
+                           value="40"
+                           oninput="updateSliderValue(this)">
+
+                    <span class="sliderValue">
+                        40
+                    </span>
+
+                </div>
+
+            </div>
+
+            <!-- TEMP -->
+
+            <div class="fieldBox">
+
+                <label>
+                    Temperature (°C)
+                </label>
+
+                <input type="number"
+                       class="numberInput">
+
+                <div class="sliderContainer">
+
+                    <input type="range"
+                           class="sliderInput"
+                           min="0"
+                           max="60"
+                           value="25"
+                           oninput="updateSliderValue(this)">
+
+                    <span class="sliderValue">
+                        25
+                    </span>
+
+                </div>
+
+            </div>
+
+        </div>
+
+        <!-- ROW 3 -->
+
+        <div class="inputRow">
+
+            <!-- HUMIDITY -->
+
+            <div class="fieldBox">
+
+                <label>
+                    Humidity (%)
+                </label>
+
+                <input type="number"
+                       class="numberInput">
+
+                <div class="sliderContainer">
+
+                    <input type="range"
+                           class="sliderInput"
+                           min="0"
+                           max="100"
+                           value="60"
+                           oninput="updateSliderValue(this)">
+
+                    <span class="sliderValue">
+                        60
+                    </span>
+
+                </div>
+
+            </div>
+
+            <!-- PH -->
+
+            <div class="fieldBox">
+
+                <label>
+                    pH Value
+                </label>
+
+                <input type="number"
+                       class="numberInput">
+
+                <div class="sliderContainer">
+
+                    <input type="range"
+                           class="sliderInput"
+                           min="0"
+                           max="14"
+                           value="6.5"
+                           step="0.1"
+                           oninput="updateSliderValue(this)">
+
+                    <span class="sliderValue">
+                        6.5
+                    </span>
+
+                </div>
+
+            </div>
+
+        </div>
+
+        <!-- ROW 4 -->
+
+        <div class="inputRow">
+
+            <!-- RAINFALL -->
+
+            <div class="fieldBox">
+
+                <label>
+                    Rainfall (mm)
+                </label>
+
+                <input type="number"
+                       class="numberInput">
+
+                <div class="sliderContainer">
+
+                    <input type="range"
+                           class="sliderInput"
+                           min="0"
+                           max="500"
+                           value="100"
+                           oninput="updateSliderValue(this)">
+
+                    <span class="sliderValue">
+                        100
+                    </span>
+
+                </div>
+
+            </div>
+
+        </div>
+
+    </div>
+
+    
+
+    <!-- PREFERENCE SECTION -->
+
+    <div class="preferenceSection">
+
+        <h2>
+            Now Please Answer The Below Questions
+            According To Your Preference
+        </h2>
+
+        <!-- ALPHA -->
+
+        <div class="preferenceBox">
+
+            <label>
+
+                Crop Suitability Priority (Alpha)
+
+            </label>
+
+            <p>
+
+                Higher alpha means you want crops
+                that are more suitable for your soil
+                and weather conditions according to
+                the AI prediction model.
+
+            </p>
+
+           <input type="number"
+                min="0"
+                max="10"
+                class="numberInput"
+                placeholder="Enter value between 0-10">
+
+            <div class="sliderContainer">
+
+            <input type="range"
+                class="sliderInput"
+                min="0"
+                max="10"
+                value="3"
+                oninput="updateSliderValue(this)">
+
+            <span class="sliderValue">
+                3
+            </span>
+
+</div>
+
+        </div>
+
+        <!-- BETA -->
+
+        <div class="preferenceBox">
+
+            <label>
+
+                Profit Priority (Beta)
+
+            </label>
+
+            <p>
+
+                Higher beta means you prefer crops
+                that may provide higher market profit
+                per kilogram.
+
+            </p>
+
+           <input type="number"
+                min="0"
+                max="10"
+                class="numberInput"
+                placeholder="Enter value between 0-10">
+
+            <div class="sliderContainer">
+
+            <input type="range"
+                class="sliderInput"
+                min="0"
+                max="10"
+                value="7"
+                oninput="updateSliderValue(this)">
+
+            <span class="sliderValue">
+                7
+            </span>
+
+        </div>
+    </div>
+        <!-- GAMMA -->
+
+        <div class="preferenceBox">
+
+            <label>
+
+                Yield Priority (Gamma)
+
+            </label>
+
+            <p>
+
+                Higher gamma means you prefer crops
+                that produce more crop quantity
+                per hectare.
+
+            </p>
+
+           <input type="number"
+                min="0"
+                max="10"
+                class="numberInput"
+                placeholder="Enter value between 0-10">
+
+            <div class="sliderContainer">
+
+            <input type="range"
+                class="sliderInput"
+                min="0"
+                max="10"
+                value="5"
+                oninput="updateSliderValue(this)">
+
+            <span class="sliderValue">
+                5
+            </span>
+
+        </div>
+
+    </div>
+    
+    <button onclick="predictCrop()">
+        Predict Crop
+    </button>
+    <div class="checkboxContainer">
+
+        <input
+            type="checkbox"
+            id="showLowProbability">
+
+        <label for="showLowProbability">
+
+            Show low probability crops
+
+        </label>
+
+    </div>
+
+    <br><br>
+
+    <div id="predictionResult">
+
+    </div>
+
+    <div class="backButtonContainer">
+
+        <a href="/main"
+        class="backButton">
+
+            Back To Dashboard
+
+        </a>
+
+    </div>
+    
+</div>
+
+<script>
+function closePopup(){
+
+    let checkbox =
+        document.getElementById("confirmCheckbox");
+
+    if(!checkbox.checked){
+
+        alert(
+            "Please confirm before proceeding."
+        );
+
+        return;
+    }
+
+    document.getElementById("popupOverlay")
+        .style.display = "none";
+}
+
+function changeInputMode(){
+
+    let selectedMode =
+        document.querySelector(
+            'input[name="inputMode"]:checked'
+        ).value;
+
+    let numberInputs =
+        document.querySelectorAll(".numberInput");
+
+    let sliderContainers =
+        document.querySelectorAll(".sliderContainer");
+
+    if(selectedMode === "slider"){
+
+        numberInputs.forEach(input => {
+            input.style.display = "none";
+        });
+
+        sliderContainers.forEach(container => {
+            container.style.display = "flex";
+        });
+    }
+
+    else{
+
+        numberInputs.forEach(input => {
+            input.style.display = "block";
+        });
+
+        sliderContainers.forEach(container => {
+            container.style.display = "none";
+        });
+    }
+}
+
+function updateSliderValue(slider){
+
+    slider.nextElementSibling.innerHTML =
+        slider.value;
+
+    let min = slider.min;
+    let max = slider.max;
+    let value = slider.value;
+
+    let percentage =
+        ((value - min) / (max - min)) * 100;
+
+    slider.style.background =
+        `linear-gradient(
+            to right,
+            #1d976c 0%,
+            #1d976c ${percentage}%,
+            #d3d3d3 ${percentage}%,
+            #d3d3d3 100%
+        )`;
+}
+
+window.onload = function(){
+
+    changeInputMode();
+    document
+    .querySelectorAll(".sliderInput")
+    .forEach(slider => {
+
+        updateSliderValue(slider);
+    });
+}
+async function predictCrop(){
+
+    let mode =
+        document.querySelector(
+            'input[name="inputMode"]:checked'
+        ).value;
+
+    let data;
+
+    if(mode === "number"){
+
+        let values =
+            document.querySelectorAll(
+                ".numberInput"
+            );
+
+        data = {
+
+            N: values[0].value,
+            P: values[1].value,
+            K: values[2].value,
+
+            temperature:
+                values[3].value,
+
+            humidity:
+                values[4].value,
+
+            ph:
+                values[5].value,
+
+            rainfall:
+                values[6].value,
+
+            alpha:
+                values[7].value,
+
+            beta:
+                values[8].value,
+
+            gamma:
+                values[9].value
+        };
+    }
+
+    else{
+
+        let sliders =
+            document.querySelectorAll(
+                ".sliderInput"
+            );
+
+        data = {
+
+            N: sliders[0].value,
+            P: sliders[1].value,
+            K: sliders[2].value,
+
+            temperature:
+                sliders[3].value,
+
+            humidity:
+                sliders[4].value,
+
+            ph:
+                sliders[5].value,
+
+            rainfall:
+                sliders[6].value,
+
+            alpha:
+                sliders[7].value,
+
+            beta:
+                sliders[8].value,
+
+            gamma:
+                sliders[9].value
+        };
+    }
+
+    console.log(data);
+
+    let response =
+        await fetch("/predict", {
+
+            method:"POST",
+
+            headers:{
+                "Content-Type":
+                "application/json"
+            },
+
+            body:JSON.stringify(data)
+        });
+
+    let result =
+        await response.json();
+
+    console.log(result);
+
+    let recommendations =
+        result.recommendations;
+
+    let showLowProbability =
+
+    document.getElementById(
+        "showLowProbability"
+    ).checked;
+    let tableHTML =
+
+    `
+    <h2>
+        Crop Ranking
+    </h2>
+
+    <table class="resultTable">
+
+        <tr>
+
+            <th>
+                Rank
+            </th>
+
+            <th>
+                Crop Name
+            </th>
+
+            <th>
+                Probability Of Growing
+            </th>
+
+        </tr>
+    `;
+
+    let rank = 1;
+
+    for(let i = 0;
+        i < recommendations.length;
+        i++){
+
+        if(
+            !showLowProbability &&
+            recommendations[i].probability < 1
+        ){
+
+            continue;
+        }
+
+        let rowClass = "";
+
+        if(rank === 1){
+
+            rowClass = "goldRow";
+        }
+
+        else if(rank === 2){
+
+            rowClass = "silverRow";
+        }
+
+        else if(rank === 3){
+
+            rowClass = "bronzeRow";
+        }
+
+        tableHTML +=
+
+        `
+        <tr class="${rowClass}">
+
+        <td>
+        ${
+            rank === 1 ? "🥇" :
+            rank === 2 ? "🥈" :
+            rank === 3 ? "🥉" :
+            rank
+        }
+        </td>
+
+        <td>
+            ${recommendations[i].crop}
+        </td>
+
+        <td>
+            ${recommendations[i].probability}%
+        </td>
+
+        </tr>
+        `;
+        rank++;
+    }
+
+    tableHTML +=
+    `
+    </table>
+
+    <div class="recommendationExplanation">
+
+        <h3>
+            Recommendation Summary
+        </h3>
+
+        <p>
+
+            Based on the soil nutrients,
+            weather conditions and your
+            Alpha, Beta and Gamma
+            preferences,
+
+            <strong>
+                ${recommendations[0].crop}
+            </strong>
+
+            appears to be the most suitable
+            crop for cultivation.
+
+        </p>
+
+        <p>
+
+            Estimated probability of
+            successful growth:
+
+            <strong>
+                ${recommendations[0].probability}%
+            </strong>
+
+        </p>
+
+        <p>
+
+            The ranking above considers
+            suitability, profitability
+            and expected yield according
+            to the preferences selected
+            by the user.
+
+        </p>
+
+    </div>
+    `;
+
+    document.getElementById(
+        "predictionResult"
+    ).innerHTML =
+    tableHTML;
+    }
+</script>
+
+</body>
+
+</html>

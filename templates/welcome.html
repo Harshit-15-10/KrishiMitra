@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+
+    <title>KrishiMitra</title>
+
+    <link rel="stylesheet"
+      href="{{ url_for('static',
+      filename='style.css') }}">
+
+</head>
+
+<body class="welcomeBody">
+
+<div class="languageBox">
+
+    <select onchange="changeLanguage(this.value)">
+
+        <option value="english">
+            English
+        </option>
+
+        <option value="hindi">
+            हिन्दी
+        </option>
+
+    </select>
+
+</div>
+
+<div class="welcomeBox">
+
+    <h1>
+        KrishiMitra
+    </h1>
+
+    <p id="welcomeText">
+
+        Welcome to KrishiMitra, where agriculture meets Artificial Intelligence.
+    </p>
+
+    <button onclick="goToMainPage()" id="nextBtn">
+
+        Next
+
+    </button>
+
+</div>
+
+<script src="{{ url_for('static',
+         filename='script.js') }}"></script>
+
+</body>
+</html>
